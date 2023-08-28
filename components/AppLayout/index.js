@@ -1,15 +1,15 @@
-export default function AppLayout ({children}) {
+import { fonts } from "../../styles/theme";
+
+export default function AppLayout({ children }) {
   return (
     <>
-      <main>
-        {children}
-      </main>
+      <main>{children}</main>
       <style jsx global>{`
         html,
         body {
           padding: 0;
           margin: 0;
-          font-family: monospace;
+          font-family: ${fonts.base};
         }
 
         * {
@@ -17,5 +17,5 @@ export default function AppLayout ({children}) {
         }
       `}</style>
     </>
-  )
+  );
 }
