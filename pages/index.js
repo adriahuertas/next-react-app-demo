@@ -6,14 +6,17 @@ import { colors } from "../styles/theme";
 import Button from '../components/Button';
 import GitHub from '../components/Icons/GitHub';
 import { loginWithGitHub } from '../firebase/client';
+import { useState } from 'react';
 
 
 export default function Home() {
-  const router = useRouter();
+  const [user, setUser] = useState(null);
 
   const handleClick = async () => {
     try {
-      const {username, avatarUrl, name} = await loginWithGitHub();
+      const user = await loginWithGitHub();
+      const {username, avatarUrl, name} = user;
+      setUser(user);
       console.log(username, avatarUrl, name);
     } catch (error) {
       console.log(error);
