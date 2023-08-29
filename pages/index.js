@@ -1,27 +1,30 @@
-import Head from "next/head";
-import Link from "next/link";
-import { useRouter } from "next/router";
-import AppLayout from "../components/AppLayout";
-import { colors } from "../styles/theme";
-import Button from '../components/Button';
-import GitHub from '../components/Icons/GitHub';
-import { loginWithGitHub } from '../firebase/client';
-import { useState } from 'react';
+import { useEffect, useState } from "react";
 
+import Head from "next/head";
+
+import AppLayout from "components/AppLayout";
+import Avatar from "components/Avatar";
+import Button from "components/Button";
+import GitHub from "components/Icons/GitHub";
+
+import { colors } from "styles/theme";
+
+import { loginWithGitHub, onAuthStateChanged } from "firebase/client";
 
 export default function Home() {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(undefined);
 
-  const handleClick = async () => {
-    try {
-      const user = await loginWithGitHub();
-      const {username, avatarUrl, name} = user;
-      setUser(user);
-      console.log(username, avatarUrl, name);
-    } catch (error) {
-      console.log(error);
-    }
-  }
+  useEffect(() => {
+    onAuthStateChanged(setUser);
+  }, []);
+
+  const handleClick = () => {
+    loginWithGitHub()
+      .then(setUser)
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   return (
     <>
@@ -36,10 +39,21 @@ export default function Home() {
           <h1>Devter</h1>
           <h2>Talk about coding! 👩‍💻👩‍💻</h2>
           <div>
-            <Button onClick={handleClick}>
-              <GitHub fill="#fff" width={24} height={24} />
-              Login with GitHub
-            </Button>
+            {user === null && (
+              <Button onClick={handleClick}>
+                <GitHub fill="#fff" width={24} height={24} />
+                Login with GitHub
+              </Button>
+            )}
+            {user && (
+              <div>
+                <Avatar
+                  src={user.avatar}
+                  alt={user.username}
+                  text={user.username}
+                />
+              </div>
+            )}
           </div>
         </section>
       </AppLayout>
@@ -70,9 +84,9 @@ export default function Home() {
         h2 {
           color: ${colors.primary};
           font-size: 21px;
-          margin: 0
+          margin: 0;
         }
-        `}</style>
+      `}</style>
     </>
   );
 }
