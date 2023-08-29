@@ -10,6 +10,7 @@ import GitHub from "components/Icons/GitHub";
 import { colors } from "styles/theme";
 
 import { loginWithGitHub, onAuthStateChanged } from "firebase/client";
+import Logo from "components/Icons/Logo";
 
 export default function Home() {
   const [user, setUser] = useState(undefined);
@@ -35,8 +36,7 @@ export default function Home() {
 
       <AppLayout>
         <section>
-          <img src="/devter.png" alt="logo" />
-          <h1>Devter</h1>
+          <Logo fill="#fff" width={200} height={200} />
           <h2>Talk about coding! 👩‍💻👩‍💻</h2>
           <div>
             {user === null && (
