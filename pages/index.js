@@ -11,13 +11,9 @@ import { loginWithGitHub } from '../firebase/client';
 export default function Home() {
   const router = useRouter();
 
-  const handleClick = () => {
-    loginWithGitHub().then(user => {
-      const { avatar, username, url } = user;
-      console.log(avatar, username, url);
-    }).catch(err => {
-      console.log(err);
-    });
+  const handleClick = async () => {
+    const user = await loginWithGitHub();
+    console.log(user);
   }
 
   return (
