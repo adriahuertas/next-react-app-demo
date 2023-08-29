@@ -1,11 +1,12 @@
-import Head from 'next/head'
-import Link from 'next/link'
-import {useRouter} from 'next/router'
-import AppLayout from '../components/AppLayout'
-// devit
+import Head from "next/head";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import AppLayout from "../components/AppLayout";
+import { colors } from "../styles/theme";
+
 
 export default function Home() {
-  const router = useRouter()
+  const router = useRouter();
 
   return (
     <>
@@ -15,39 +16,38 @@ export default function Home() {
       </Head>
 
       <AppLayout>
-        <h1>
-          <a href="https://nextjs.org">devter</a>
-        </h1>
-        <nav>
-          <Link href='/timeline'>
-            <a>
-              timeline
-            </a>
-          </Link>
-        </nav>
+        <section>
+          <img src="/devter.png" alt="logo" />
+          <h1>Devter</h1>
+          <h2>Talk about coding! 👩‍💻👩‍💻</h2>
+        </section>
       </AppLayout>
 
       <style jsx>{`
+        img {
+          width: 120px;
+          border-radius: 10% 90% 10% 90%;
+        }
+
+        section {
+          display: grid;
+          place-content: center;
+          place-items: center;
+          height: 100%;
+        }
+
         h1 {
-          text-align: center;
-          font-size: 48px;
+          color: ${colors.primary};
+          font-weight: 800;
+          margin-bottom: 16px;
         }
 
-        nav {
-          font-size: 24px;
-          text-align: center;
+        h2 {
+          color: ${colors.secondary};
+          font-size: 21px;
+          margin: 0
         }
-
-        .another-title {
-          color: #333;
-          font-size: 24px;
-        }
-
-        a {
-          color: orange;
-          text-decoration: none;
-        }
-      `}</style>
+        `}</style>
     </>
-  )
+  );
 }
