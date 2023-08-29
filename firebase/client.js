@@ -30,9 +30,9 @@ export const loginWithGitHub = async () => {
     const user = result.user;
     // IdP data available using getAdditionalUserInfo(result)
     // ...
-    console.log(user);
-    const {displayName} = user;
-    return displayName;
+    
+    const {displayName: name, photoUrl: avatarUrl, screenName: username} = user.reloadUserInfo;
+    return {name, avatarUrl, username};
   }
   catch (error) {
     // Handle Errors here.
@@ -43,6 +43,6 @@ export const loginWithGitHub = async () => {
     // The AuthCredential type that was used.
     const credential = GithubAuthProvider.credentialFromError(error);
     // ...
-    console.log(error.message);
+    return (error.message);
   }
 }

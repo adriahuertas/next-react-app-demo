@@ -12,8 +12,12 @@ export default function Home() {
   const router = useRouter();
 
   const handleClick = async () => {
-    const user = await loginWithGitHub();
-    console.log(user);
+    try {
+      const {username, avatarUrl, name} = await loginWithGitHub();
+      console.log(username, avatarUrl, name);
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   return (
