@@ -1,6 +1,13 @@
-import Avatar from "components/Avatar";
+import Avatar from "components/Avatar"
 
-export default function Devit({ avatar, message, username, id }) {
+export default function Devit({
+  avatar,
+  message,
+  username,
+  id,
+  userId,
+  createdAt,
+}) {
   return (
     <>
       <article>
@@ -9,6 +16,8 @@ export default function Devit({ avatar, message, username, id }) {
         </div>
         <section>
           <strong>{username}</strong>
+          <span> · </span>
+          <date>{createdAt}</date>
           <p>{message}</p>
         </section>
       </article>
@@ -16,6 +25,7 @@ export default function Devit({ avatar, message, username, id }) {
         article {
           padding: 10px 15px;
           display: flex;
+          border-bottom: 2px solid #eaf7ff;
         }
 
         div {
@@ -26,7 +36,12 @@ export default function Devit({ avatar, message, username, id }) {
           line-height: 1.3125;
           margin: 0;
         }
+
+        date {
+          color: #555;
+          font-size: 14px;
+        }
       `}</style>
     </>
-  );
+  )
 }

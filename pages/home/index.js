@@ -1,17 +1,21 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect } from "react"
 
-import AppLayout from "components/AppLayout";
-import Devit from "components/Devit";
+import AppLayout from "components/AppLayout"
+import Devit from "components/Devit"
+import useUser from "hooks/useUser"
+import { fetchLatestsDevits } from "firebase/client"
 
 export default function HomePage() {
-  const [timeline, setTimeline] = useState([]);
+  const [timeline, setTimeline] = useState([])
 
+  const user = useUser()
   useEffect(() => {
-    fetch("/api/statuses/home_timeline")
-      .then((res) => res.json())
-      .then(setTimeline)
-      .catch((err) => console.log(err));
-  }, []);
+    user &&
+      fetchLatestsDevits()
+        .then(setTimeline)
+        .catch((err) => console.log(err))
+  }, [user])
+
   return (
     <>
       <AppLayout>
@@ -27,20 +31,24 @@ export default function HomePage() {
                 username={devit.username}
                 message={devit.message}
                 id={devit.id}
+                userId={devit.userId}
+                createdAt={devit.createdAt}
               />
-            );
+            )
           })}
         </section>
         <nav></nav>
       </AppLayout>
       <style jsx>{`
         header {
-          border-bottom: 1px solid #ccc;
+          border-bottom: 1px solid #eee;
+          background: #ffffffaa;
+          backdrop-filter: blur(5px);
           display: flex;
           align-items: center;
           width: 100%;
           height: 49px;
-          position: fixed;
+          position: sticky;
           top: 0;
         }
 
@@ -50,18 +58,15 @@ export default function HomePage() {
           padding-left: 15px;
         }
 
-        section {
-          padding-top: 49px;
-        }
-
         nav {
           bottom: 0;
-          border-top: 1px solid #ccc;
+          background: #fff;
+          border-top: 1px solid #eee;
           height: 49px;
-          position: fixed;
+          position: sticky;
           width: 100%;
         }
       `}</style>
     </>
-  );
+  )
 }

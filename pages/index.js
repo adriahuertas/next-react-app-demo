@@ -1,31 +1,32 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react"
 
-import Head from "next/head";
+import Head from "next/head"
+import { useRouter } from "next/router"
 
-import AppLayout from "components/AppLayout";
-import Avatar from "components/Avatar";
-import Button from "components/Button";
-import GitHub from "components/Icons/GitHub";
+import AppLayout from "components/AppLayout"
+import Button from "components/Button"
+import GitHub from "components/Icons/GitHub"
 
-import { colors } from "styles/theme";
+import { colors } from "styles/theme"
 
-import { loginWithGitHub, onAuthStateChanged } from "firebase/client";
-import Logo from "components/Icons/Logo";
+import { loginWithGitHub } from "firebase/client"
+import Logo from "components/Icons/Logo"
+import useUser, { USER_STATES } from "hooks/useUser"
 
 export default function Home() {
-  const [user, setUser] = useState(undefined);
+  const user = useUser()
+
+  const router = useRouter()
 
   useEffect(() => {
-    onAuthStateChanged(setUser);
-  }, []);
+    user && router.replace("/home")
+  }, [user])
 
   const handleClick = () => {
-    loginWithGitHub()
-      .then(setUser)
-      .catch((err) => {
-        console.log(err);
-      });
-  };
+    loginWithGitHub().catch((err) => {
+      console.log(err)
+    })
+  }
 
   return (
     <>
@@ -39,21 +40,13 @@ export default function Home() {
           <Logo fill="#fff" width={200} height={200} />
           <h2>Talk about coding! 👩‍💻👩‍💻</h2>
           <div>
-            {user === null && (
+            {user === USER_STATES.NOT_LOGGED && (
               <Button onClick={handleClick}>
                 <GitHub fill="#fff" width={24} height={24} />
                 Login with GitHub
               </Button>
             )}
-            {user && (
-              <div>
-                <Avatar
-                  src={user.avatar}
-                  alt={user.username}
-                  text={user.username}
-                />
-              </div>
-            )}
+            {user === USER_STATES.NOT_KNOWN && <img src="spinner.gif" />}
           </div>
         </section>
       </AppLayout>
@@ -61,7 +54,6 @@ export default function Home() {
       <style jsx>{`
         img {
           width: 120px;
-          border-radius: 10% 90% 10% 90%;
         }
 
         div {
@@ -88,5 +80,5 @@ export default function Home() {
         }
       `}</style>
     </>
-  );
+  )
 }
