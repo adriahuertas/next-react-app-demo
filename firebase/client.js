@@ -87,14 +87,11 @@ export const fetchLatestsDevits = async () => {
     const data = doc.data()
     const id = doc.id
     const { createdAt } = data
-    const normalizedCreatedAt = new Intl.DateTimeFormat("en-US").format(
-      new Date(createdAt)
-    )
 
     return {
       ...data,
       id,
-      createdAt: normalizedCreatedAt,
+      createdAt,
     }
   })
 }
