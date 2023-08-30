@@ -1,5 +1,13 @@
 import { initializeApp } from "firebase/app"
-import { getFirestore, collection, addDoc, getDocs } from "firebase/firestore"
+import {
+  getFirestore,
+  collection,
+  addDoc,
+  getDocs,
+  query,
+  orderBy,
+  limit,
+} from "firebase/firestore"
 
 import { GithubAuthProvider, getAuth, signInWithPopup } from "firebase/auth"
 
@@ -82,7 +90,11 @@ export const addDevit = async ({ avatar, message, userId, username }) => {
 }
 
 export const fetchLatestsDevits = async () => {
-  const querySnapshot = await getDocs(collection(db, "devits"))
+  const devitsRef = collection(db, "devits")
+
+  const q = query(devitsRef, orderBy("createdAt", "desc"), limit(10))
+  const querySnapshot = await getDocs(q)
+
   return querySnapshot.docs.map((doc) => {
     const data = doc.data()
     const id = doc.id
