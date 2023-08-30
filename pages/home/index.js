@@ -4,6 +4,8 @@ import AppLayout from "components/AppLayout"
 import Devit from "components/Devit"
 import useUser from "hooks/useUser"
 import { fetchLatestsDevits } from "firebase/client"
+import Link from "next/dist/client/link"
+import Create from "components/Icons/Create"
 
 export default function HomePage() {
   const [timeline, setTimeline] = useState([])
@@ -37,7 +39,13 @@ export default function HomePage() {
             )
           })}
         </section>
-        <nav></nav>
+        <nav>
+          <Link href="/compose/tweet">
+            <a>
+              <Create stroke="#09f" width={32} height={32} />{" "}
+            </a>
+          </Link>
+        </nav>
       </AppLayout>
       <style jsx>{`
         header {
@@ -50,6 +58,10 @@ export default function HomePage() {
           height: 49px;
           position: sticky;
           top: 0;
+        }
+
+        section {
+          flex: 1;
         }
 
         h2 {
