@@ -7,6 +7,8 @@ import {
   query,
   orderBy,
   limit,
+  doc,
+  onSnapshot,
 } from "firebase/firestore"
 import { getStorage, ref, uploadBytesResumable } from "firebase/storage"
 
@@ -73,12 +75,13 @@ export const loginWithGitHub = async () => {
   }
 }
 
-export const addDevit = async ({ avatar, message, userId, username }) => {
+export const addDevit = async ({ avatar, message, img, userId, username }) => {
   try {
     const docRef = await addDoc(collection(db, "devits"), {
       avatar,
       message,
       userId,
+      img,
       username,
       createdAt: Date.now(),
       likesCount: 0,
@@ -90,23 +93,39 @@ export const addDevit = async ({ avatar, message, userId, username }) => {
   }
 }
 
+const mapDevitFromFirebaseToDevitObject = (doc) => {
+  const data = doc.data()
+  const id = doc.id
+  const { createdAt } = data
+
+  return {
+    ...data,
+    id,
+    createdAt,
+  }
+}
+
+export const listenLatestDevits = (callback) => {
+  const unsub = onSnapshot(
+    query(collection(db, "devits"), orderBy("createdAt", "desc"), limit(20)),
+    (querySnapshot) => {
+      const newDevits = querySnapshot.docs.map(
+        mapDevitFromFirebaseToDevitObject
+      )
+      callback(newDevits)
+    }
+  )
+
+  return unsub
+}
+
 export const fetchLatestsDevits = async () => {
   const devitsRef = collection(db, "devits")
 
-  const q = query(devitsRef, orderBy("createdAt", "desc"), limit(10))
+  const q = query(devitsRef, orderBy("createdAt", "desc"), limit(20))
   const querySnapshot = await getDocs(q)
 
-  return querySnapshot.docs.map((doc) => {
-    const data = doc.data()
-    const id = doc.id
-    const { createdAt } = data
-
-    return {
-      ...data,
-      id,
-      createdAt,
-    }
-  })
+  return querySnapshot.docs.map(mapDevitFromFirebaseToDevitObject)
 }
 
 export const uploadImage = (file) => {

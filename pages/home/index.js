@@ -1,9 +1,8 @@
 import { useState, useEffect } from "react"
 
-import AppLayout from "components/AppLayout"
 import Devit from "components/Devit"
 import useUser from "hooks/useUser"
-import { fetchLatestsDevits } from "firebase/client"
+import { listenLatestDevits } from "firebase/client"
 import Link from "next/dist/client/link"
 import Create from "components/Icons/Create"
 import Home from "components/Icons/Home"
@@ -16,54 +15,52 @@ export default function HomePage() {
 
   const user = useUser()
   useEffect(() => {
-    user &&
-      fetchLatestsDevits()
-        .then(setTimeline)
-        .catch((err) => console.log(err))
+    if (user) {
+      listenLatestDevits(setTimeline)
+    }
   }, [user])
 
   return (
     <>
-      <AppLayout>
-        <Head>
-          <title>Inicio / Devter</title>
-        </Head>
-        <header>
-          <h2>Inicio</h2>
-        </header>
-        <section>
-          {timeline.map((devit) => {
-            return (
-              <Devit
-                key={devit.id}
-                avatar={devit.avatar}
-                username={devit.username}
-                message={devit.message}
-                id={devit.id}
-                userId={devit.userId}
-                createdAt={devit.createdAt}
-              />
-            )
-          })}
-        </section>
-        <nav>
-          <Link href="/home">
-            <a>
-              <Home stroke="#09f" width={32} height={32} />{" "}
-            </a>
-          </Link>
-          <Link href="/compose/tweet">
-            <a>
-              <Search stroke="#09f" width={32} height={32} />{" "}
-            </a>
-          </Link>
-          <Link href="/compose/tweet">
-            <a>
-              <Create stroke="#09f" width={32} height={32} />{" "}
-            </a>
-          </Link>
-        </nav>
-      </AppLayout>
+      <Head>
+        <title>Inicio / Devter</title>
+      </Head>
+      <header>
+        <h2>Inicio</h2>
+      </header>
+      <section>
+        {timeline.map((devit) => {
+          return (
+            <Devit
+              key={devit.id}
+              avatar={devit.avatar}
+              username={devit.username}
+              message={devit.message}
+              img={devit.img}
+              id={devit.id}
+              userId={devit.userId}
+              createdAt={devit.createdAt}
+            />
+          )
+        })}
+      </section>
+      <nav>
+        <Link href="/home">
+          <a>
+            <Home stroke="#09f" width={32} height={32} />{" "}
+          </a>
+        </Link>
+        <Link href="/compose/tweet">
+          <a>
+            <Search stroke="#09f" width={32} height={32} />{" "}
+          </a>
+        </Link>
+        <Link href="/compose/tweet">
+          <a>
+            <Create stroke="#09f" width={32} height={32} />{" "}
+          </a>
+        </Link>
+      </nav>
       <style jsx>{`
         header {
           border-bottom: 1px solid #eee;
@@ -90,11 +87,7 @@ export default function HomePage() {
         nav {
           background: #fff;
           border-top: 1px solid #eee;
-<<<<<<< HEAD
-          bottom: 0;
-=======
           display: flex;
->>>>>>> feature/navbar
           height: 49px;
           display: flex;
           position: sticky;
@@ -108,8 +101,6 @@ export default function HomePage() {
           height: 100%;
           justify-content: center;
         }
-<<<<<<< HEAD
-=======
 
         nav a:hover {
           background: radial-gradient(#0099ff22 15%, transparent 16%);
@@ -120,7 +111,6 @@ export default function HomePage() {
         nav a:hover > :global(svg) {
           stroke: ${colors.primary};
         }
->>>>>>> feature/navbar
       `}</style>
     </>
   )

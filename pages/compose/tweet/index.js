@@ -3,13 +3,13 @@ import { useEffect, useState } from "react"
 import { useRouter } from "next/router"
 import Head from "next/head"
 
-import AppLayout from "components/AppLayout"
 import Button from "components/Button"
 
 import useUser from "hooks/useUser"
 
 import { addDevit, uploadImage } from "firebase/client"
 import { getDownloadURL } from "firebase/storage"
+import Avatar from "components/Avatar"
 
 const COMPOSE_STATES = {
   USER_NOT_KNOWN: 0,
@@ -28,6 +28,7 @@ const DRAG_IMAGE_STATES = {
 
 export default function ComposeTweet() {
   const user = useUser()
+  console.log(user)
   const [message, setMessage] = useState("")
   const [status, setStatus] = useState(COMPOSE_STATES.USER_NOT_KNOWN)
 
@@ -81,6 +82,7 @@ export default function ComposeTweet() {
       message,
       userId: user.uid,
       username: user.username,
+      img: imgUrl,
     })
       .then(() => {
         router.push("/home")
@@ -115,10 +117,13 @@ export default function ComposeTweet() {
 
   return (
     <>
-      <AppLayout>
-        <Head>
-          <title>Publicar un tweet</title>
-        </Head>
+      <Head>
+        <title>Publicar un tweet</title>
+      </Head>
+      <section className="form-container">
+        <section className="avatar-container">
+          {user && <Avatar alt={user.name} src={user.avatar} />}
+        </section>
         <form onSubmit={handleSubmit}>
           <textarea
             onChange={handleChange}
@@ -128,7 +133,7 @@ export default function ComposeTweet() {
             placeholder="¿Qué está pasando?"
           ></textarea>{" "}
           {imgUrl && (
-            <section>
+            <section className="remove-img">
               <button onClick={() => setImgUrl(null)}>x</button>
               <img src={imgUrl} />
             </section>
@@ -137,11 +142,16 @@ export default function ComposeTweet() {
             <Button disabled={isButtonDisabled}>Publicar</Button>
           </div>
         </form>
-      </AppLayout>
+      </section>
 
       <style jsx>{`
         div {
           padding: 15px;
+        }
+
+        .avatar-container {
+          padding-top: 20px;
+          padding-left: 10px;
         }
 
         button {
@@ -162,8 +172,13 @@ export default function ComposeTweet() {
           padding: 10px;
         }
 
-        section {
-          positoin: relative;
+        .form-container {
+          align-items: flex-start;
+          display: flex;
+        }
+
+        .remove-img {
+          position: relative;
         }
 
         img {
