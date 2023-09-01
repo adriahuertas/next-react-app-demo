@@ -59,12 +59,21 @@ export default function HomePage() {
         }
 
         nav {
-          bottom: 0;
           background: #fff;
           border-top: 1px solid #eee;
+          bottom: 0;
           height: 49px;
+          display: flex;
           position: sticky;
           width: 100%;
+        }
+
+        nav a {
+          align-items: center;
+          display: flex;
+          flex: 1 1 auto;
+          height: 100%;
+          justify-content: center;
         }
       `}</style>
     </>
