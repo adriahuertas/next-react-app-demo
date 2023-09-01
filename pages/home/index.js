@@ -14,10 +14,13 @@ export default function HomePage() {
   const [timeline, setTimeline] = useState([])
 
   const user = useUser()
+
   useEffect(() => {
+    let unsubscribe
     if (user) {
-      listenLatestDevits(setTimeline)
+      unsubscribe = listenLatestDevits(setTimeline)
     }
+    return () => unsubscribe && unsubscribe()
   }, [user])
 
   return (

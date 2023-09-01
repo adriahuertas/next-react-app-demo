@@ -7,7 +7,6 @@ import {
   query,
   orderBy,
   limit,
-  doc,
   onSnapshot,
 } from "firebase/firestore"
 import { getStorage, ref, uploadBytesResumable } from "firebase/storage"
