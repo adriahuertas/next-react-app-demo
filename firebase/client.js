@@ -1,5 +1,6 @@
 import { initializeApp } from "firebase/app"
 import { getFirestore, collection, addDoc, getDocs } from "firebase/firestore"
+import { getStorage, ref, uploadBytesResumable } from "firebase/storage"
 
 import { GithubAuthProvider, getAuth, signInWithPopup } from "firebase/auth"
 
@@ -97,4 +98,12 @@ export const fetchLatestsDevits = async () => {
       createdAt: normalizedCreatedAt,
     }
   })
+}
+
+export const uploadImage = (file) => {
+  const storage = getStorage()
+  const storageRef = ref(storage, `images/${file.name}`)
+  const uploadTask = uploadBytesResumable(storageRef, file)
+
+  return uploadTask
 }
