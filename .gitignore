@@ -31,3 +31,5 @@ yarn-error.log*
 
 # Firebase admin
 firebase-keys.json
+
+.env
