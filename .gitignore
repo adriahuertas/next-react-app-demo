@@ -33,3 +33,5 @@ yarn-error.log*
 firebase-keys.json
 
 .env
+# Local Netlify folder
+.netlify
